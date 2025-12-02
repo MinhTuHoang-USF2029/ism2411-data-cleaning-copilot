@@ -66,3 +66,16 @@ df = handle_invalid_date(df)
 # Final housekeeping and save cleaned data to another csv file
 df = df.reset_index(drop=True)
 df.to_csv(r'D:\ism2411-data-cleaning-copilot\data\processed\sales_data_cleaned.csv', index=False)
+if __name__ == "__main__":
+    raw_path = "data/raw/sales_data_raw.csv"
+    cleaned_path = "data/processed/sales_data_clean.csv"
+
+    product_col = find_column(df, ["product_name", "product", "name"])
+    category_col = find_column(df, ["category", "cat"])
+    price_col = find_column(df, ["price", "unit_price", "unitprice", "sale_price", "amount"])
+    quantity_col = find_column(df, ["quantity", "qty", "units_sold", "units", "count"])
+    date_sold_col = find_column(df, ["date_sold", "sale_date", "date"])
+    df_clean = handle_invalid_date(df)
+    df_clean.to_csv(cleaned_path, index=False)
+    print("Cleaning complete. First few rows:")
+    print(df_clean.head())
