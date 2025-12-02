@@ -12,3 +12,21 @@ df.columns = (
     .str.replace(r"[^\w]+", "_", regex=True) # Replace non-word characters with underscores
     .str.replace(r"(^_|_$)", "", regex=True) # Remove underscores at start and end of names
 )
+# Find likely product, category, price, quantity columns by name fragments
+def find_column(df, candidates):
+    for c in df.columns:
+        for s in candidates:
+            if s in c:
+                return c
+    return None
+
+product_col = find_column(df, ["product_name", "product", "name"])
+category_col = find_column(df, ["category", "cat"])
+price_col = find_column(df, ["price", "unit_price", "unitprice", "sale_price", "amount"])
+quantity_col = find_column(df, ["quantity", "qty", "units_sold", "units", "count"])
+date_sold_col = find_column(df, ["date_sold", "sale_date", "date"])
+
+# Strip leading or trailing whitespace from text columns (product and category if found)
+for col in (product_col, category_col):
+    if col in df.columns and df[col].dtype == object:
+        df[col] = df[col].apply(lambda x: x.strip() if isinstance(x, str) else x)
