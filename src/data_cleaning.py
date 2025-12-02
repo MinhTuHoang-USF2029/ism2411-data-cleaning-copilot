@@ -19,14 +19,22 @@ def find_column(df, candidates):
             if s in c:
                 return c
     return None
-
 product_col = find_column(df, ["product_name", "product", "name"])
 category_col = find_column(df, ["category", "cat"])
 price_col = find_column(df, ["price", "unit_price", "unitprice", "sale_price", "amount"])
 quantity_col = find_column(df, ["quantity", "qty", "units_sold", "units", "count"])
 date_sold_col = find_column(df, ["date_sold", "sale_date", "date"])
-
-# Strip leading or trailing whitespace from text columns (product and category if found)
+# Strip leading or trailing whitespace from product names and categories to make them visually clear
 for col in (product_col, category_col):
     if col in df.columns and df[col].dtype == object:
         df[col] = df[col].apply(lambda x: x.strip() if isinstance(x, str) else x)
+# Title case product and category names
+if product_col in df.columns:
+        df[product_col] = df[product_col].apply(lambda x: x.title() if isinstance(x, str) else x)
+if category_col in df.columns:
+        df[category_col] = df[category_col].apply(lambda x: x.title() if isinstance(x, str) else x)
+# Coerce price/quantity to numeric (invalid value -> NaN)
+if price_col in df.columns:
+    df[price_col] = pd.to_numeric(df[price_col], errors="coerce")
+if quantity_col in df.columns:
+    df[quantity_col] = pd.to_numeric(df[quantity_col], errors="coerce")
