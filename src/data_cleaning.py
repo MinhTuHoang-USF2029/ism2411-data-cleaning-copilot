@@ -63,4 +63,6 @@ def handle_invalid_date(df, fill_datetime=pd.Timestamp("2024-01-07")):
         df[date_sold_col] = df[date_sold_col].fillna(fill_datetime)
     return df
 df = handle_invalid_date(df)
-
+# Final housekeeping and save cleaned data to another csv file
+df = df.reset_index(drop=True)
+df.to_csv(r'D:\ism2411-data-cleaning-copilot\data\processed\sales_data_cleaned.csv', index=False)
