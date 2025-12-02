@@ -33,8 +33,21 @@ if product_col in df.columns:
         df[product_col] = df[product_col].apply(lambda x: x.title() if isinstance(x, str) else x)
 if category_col in df.columns:
         df[category_col] = df[category_col].apply(lambda x: x.title() if isinstance(x, str) else x)
-# Coerce price/quantity to numeric (invalid value -> NaN)
+# Coerce price or quantity to numeric (invalid value -> NaN)
 if price_col in df.columns:
     df[price_col] = pd.to_numeric(df[price_col], errors="coerce")
 if quantity_col in df.columns:
     df[quantity_col] = pd.to_numeric(df[quantity_col], errors="coerce")
+# Handle missing prices, quantities, and date_sold: drop rows where either is missing 
+cols = [price_col, quantity_col]
+cols = [c.strip() for c in cols if isinstance(c, str) and c.strip()]
+required = [c for c in cols if c in df.columns]
+if required:
+    df = df.dropna(subset=required)
+else:
+     print("No invalid price or quantity to clean.")
+# Remove rows with clearly invalid values (negative price/quantity or zero price/quantity)
+if price_col in df.columns:
+    df = df[df[price_col] > 0]
+if quantity_col in df.columns:
+    df = df[df[quantity_col] > 0]
