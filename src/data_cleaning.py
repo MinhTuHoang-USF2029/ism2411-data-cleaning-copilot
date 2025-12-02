@@ -38,7 +38,7 @@ if price_col in df.columns:
     df[price_col] = pd.to_numeric(df[price_col], errors="coerce")
 if quantity_col in df.columns:
     df[quantity_col] = pd.to_numeric(df[quantity_col], errors="coerce")
-# Handle missing prices, quantities, and date_sold: drop rows where either is missing 
+# Handle missing prices, quantities: drop rows where either is missing 
 cols = [price_col, quantity_col]
 cols = [c.strip() for c in cols if isinstance(c, str) and c.strip()]
 required = [c for c in cols if c in df.columns]
@@ -51,3 +51,16 @@ if price_col in df.columns:
     df = df[df[price_col] > 0]
 if quantity_col in df.columns:
     df = df[df[quantity_col] > 0]
+# Convert date sold to datetime and add rows with invalid dates or missing dates with a specific datetime
+def handle_invalid_date(df, fill_datetime=pd.Timestamp("2024-01-07")):
+    if date_sold_col in df.columns:
+        # Coerce to datetime (invalid -> NaT)
+        df[date_sold_col] = pd.to_datetime(df[date_sold_col], errors="coerce", infer_datetime_format=True)
+        # Ensure fill_datetime is a pandas Timestamp (not a string)
+        if not isinstance(fill_datetime, pd.Timestamp):
+            fill_datetime = pd.to_datetime(fill_datetime)
+        # Fill missing or invalid dates with the provided datetime (remains datetime dtype)
+        df[date_sold_col] = df[date_sold_col].fillna(fill_datetime)
+    return df
+df = handle_invalid_date(df)
+
