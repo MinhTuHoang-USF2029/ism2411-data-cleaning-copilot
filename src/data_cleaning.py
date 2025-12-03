@@ -22,7 +22,7 @@ def find_column(df, candidates):
 product_col = find_column(df, ["product_name", "product", "name"])
 category_col = find_column(df, ["category", "cat"])
 price_col = find_column(df, ["price", "unit_price", "unitprice", "sale_price", "amount"])
-quantity_col = find_column(df, ["quantity", "qty", "units_sold", "units", "count"])
+quantity_col = find_column(df, ["quantity","qty", "units_sold", "units", "count"])
 date_sold_col = find_column(df, ["date_sold", "sale_date", "date"])
 # Strip leading or trailing whitespace from product names and categories to make them visually clear
 for col in (product_col, category_col):
@@ -65,7 +65,7 @@ def handle_invalid_date(df, fill_datetime=pd.Timestamp("2024-01-07")):
 df = handle_invalid_date(df)
 # Final housekeeping and save cleaned data to another csv file
 df = df.reset_index(drop=True)
-df.to_csv(r'D:\ism2411-data-cleaning-copilot\data\processed\sales_data_cleaned.csv', index=False)
+#df.to_csv(r'D:\ism2411-data-cleaning-copilot\data\processed\sales_data_cleaned.csv', index=False)
 if __name__ == "__main__":
     raw_path = "data/raw/sales_data_raw.csv"
     cleaned_path = "data/processed/sales_data_clean.csv"
