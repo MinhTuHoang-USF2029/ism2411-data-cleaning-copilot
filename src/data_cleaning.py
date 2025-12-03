@@ -65,7 +65,7 @@ def handle_invalid_date(df, fill_datetime=pd.Timestamp("2024-01-07")):
 df = handle_invalid_date(df)
 # Final housekeeping and save cleaned data to another csv file
 df = df.reset_index(drop=True)
-#df.to_csv(r'D:\ism2411-data-cleaning-copilot\data\processed\sales_data_cleaned.csv', index=False)
+df.to_csv(r'D:\ism2411-data-cleaning-copilot\data\processed\sales_data_cleaned.csv', index=False)
 if __name__ == "__main__":
     raw_path = "data/raw/sales_data_raw.csv"
     cleaned_path = "data/processed/sales_data_clean.csv"
